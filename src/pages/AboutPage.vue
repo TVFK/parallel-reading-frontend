@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-4xl mx-auto">
       <h1 class="text-4xl font-bold text-center text-gray-900 mb-8">
-        О проекте Bulkus
+        О проекте Boolkus
       </h1>
 
       <div class="space-y-6 text-lg text-gray-700">
@@ -25,7 +25,7 @@
 
       <div class="mt-12">
         <h2 class="text-2xl font-bold text-gray-900 mb-6">
-          Почему выбирают Bulkus?
+          Почему выбирают Boolkus?
         </h2>
         <ul class="space-y-4 text-gray-700">
           <li class="flex items-start">

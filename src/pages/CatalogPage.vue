@@ -25,7 +25,7 @@
         <h1 class="text-center font-arial text-[32px] font-bold leading-[140%] text-black mb-4">
           {{ books.level }}
         </h1>
-        <div class="w-full h-[1px] bg-black mb-8"></div>
+        <div class="w-full h-[1px] bg-gray-500 mb-8"></div>
         <BookList :bookList="books.books" layout="horizontal" />
       </div>
     </div>

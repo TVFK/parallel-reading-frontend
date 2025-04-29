@@ -1,6 +1,8 @@
+import type { Sentence } from './Sentence'
+
 export interface Page {
   id: number
-  content: string
-  pageNumber: number
   chapterId: number
+  pageNumber: number
+  sentences: Sentence[]
 }

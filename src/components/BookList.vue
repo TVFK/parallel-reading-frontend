@@ -3,7 +3,7 @@
     <!-- Горизонтальный режим -->
     <div v-if="layout === 'horizontal'" class="relative">
       <button @click="scrollLeft"
-        class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 transition-colors">
+        class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer p-2 rounded-full shadow-lg hover:bg-gray-100 transition-colors">
         <IconArrow class="w-6 h-6 transform rotate-180" />
       </button>
 
@@ -15,7 +15,7 @@
       </div>
 
       <button @click="scrollRight"
-        class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 transition-colors">
+        class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer p-2 rounded-full shadow-lg hover:bg-gray-100 transition-colors">
         <IconArrow class="w-6 h-6" />
       </button>
     </div>

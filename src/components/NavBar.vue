@@ -2,7 +2,7 @@
   <nav class="fixed top-0 left-0 right-0 h-16 flex items-center bg-white shadow-md z-50 px-6">
     <div @click="$router.push('/')" class="cursor-pointer flex items-center space-x-2">
       <IconLogo class="w-8 h-8 bg-white rounded-lg shadow-md" />
-      <span class="font-bold text-xl text-black">Bulkus</span>
+      <span class="font-bold text-xl text-black">Boolkus</span>
     </div>
 
     <div
@@ -29,7 +29,7 @@
 
       <div class="cursor-pointer flex flex-col items-center text-sm hover:scale-105 transition-transform">
         <IconMyBooks class="w-8 h-8 text-gray-800" />
-        <span>Мои книги</span>
+        <span>Словарь</span>
       </div>
 
       <div @click="$router.push('/login')"

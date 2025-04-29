@@ -3,7 +3,7 @@
   <div class="container mx-auto mt-20 px-4">
     <div class="flex flex-wrap items-center gap-4 mb-6">
       <select :value="currentSort" @change="updateSort" class="p-2 border rounded cursor-pointer">
-        <option value="publishedDate,asc">По дате выпуска</option>
+        <option value="publishedYear,asc">По дате выпуска</option>
         <option value="level,asc">По сложности</option>
       </select>
 
@@ -68,7 +68,7 @@ const showGenreDropdown = ref(false);
 const genreDropdown = ref<HTMLElement | null>(null);
 const genreButton = ref<HTMLElement | null>(null);
 
-const currentSort = computed(() => route.query.sort?.toString() || 'publishedDate,asc');
+const currentSort = computed(() => route.query.sort?.toString() || 'publishedYear,asc');
 const currentLevel = computed(() => route.query.level?.toString() || '');
 const selectedGenres = computed(() =>
   (route.query.genres?.toString() || '').split(',').filter(Boolean)

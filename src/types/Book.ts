@@ -4,8 +4,8 @@ export interface Book {
   id: number
   title: string
   author: string
-  image: string
-  publisherDate: string
+  imageUrl: string
+  publishedYear: string
   level: string
   description: string
   numberOfPage: number

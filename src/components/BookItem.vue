@@ -1,5 +1,5 @@
 <template>
-  <div @click="$router.push(`/books/review/${book.title}`)"
+  <div @click="navigateToReview"
     class="cursor-pointer relative w-full max-w-[300px] h-[470px] bg-[#D9D9D9] rounded-[44px] overflow-hidden transition-transform transform hover:scale-105 hover:shadow-lg hover:z-10 transform-origin-center">
     <img :src="bookImageUrl" alt="book image" class="w-full h-[380px] object-cover" />
 
@@ -18,6 +18,8 @@
 <script setup lang="ts">
 import type { Book } from '@/types/Book';
 import { computed } from 'vue';
+import router from '@/router';
+import { useBookContextStore } from '@/stores/BookContextStore';
 
 const props = defineProps({
   book: {
@@ -27,7 +29,13 @@ const props = defineProps({
 });
 
 const bookImageUrl = computed(() => {
-  return props.book ? `http://localhost:8080/${props.book.image}` : '';
+  return props.book ? `http://localhost:8080/${props.book.imageUrl}` : '';
 });
 
+const bookContextStore = useBookContextStore();
+
+const navigateToReview = () => {
+  bookContextStore.setCurrentBook(props.book);
+  router.push(`/books/review/${props.book.title}`)
+}
 </script>

@@ -7,13 +7,13 @@
     </div>
 
     <div class="text-center text-sm">
-      <div @click="$router.push('/about')" class="cursor-pointer">О проекте</div>
-      <div>Copyright © 2003-2025 Bulkus</div>
+      <div @click="$router.push('/about')" class="hover:underline cursor-pointer">О проекте</div>
+      <div>Copyright © 2003-2025 Boolkus</div>
     </div>
 
     <div class="text-right text-sm">
-      <div>Пользовательское соглашение</div>
-      <div>Политика конфиденциальности</div>
+      <div class="hover:underline cursor-pointer">Пользовательское соглашение</div>
+      <div class="hover:underline cursor-pointer">Политика конфиденциальности</div>
     </div>
   </footer>
 </template>
