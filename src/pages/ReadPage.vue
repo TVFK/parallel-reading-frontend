@@ -13,6 +13,10 @@
       </div>
     </div>
 
+    <WordTranslationCard v-if="wordTranslationCard.show" :word="wordTranslationCard.word" :x="wordTranslationCard.x"
+      :y="wordTranslationCard.y" :loading="wordTranslationCard.loading" :error="wordTranslationCard.error"
+      :transcription="wordTranslationCard.transcription" :definitions="wordTranslationCard.definitions" />
+
     <!-- Окно со списком глав -->
     <div v-if="showChapters"
       class="fixed right-0 top-0 h-full w-64 bg-white shadow-lg p-6 border-l border-gray-200 z-50">
@@ -90,6 +94,8 @@ import { ref, computed, onMounted, reactive } from 'vue';
 import IconArrow from '@/components/icons/IconArrow.vue';
 import IconSettings from '@/components/icons/IconSettings.vue';
 import IconStructure from '@/components/icons/IconStructure.vue';
+import WordTranslationCard from '@/components/WordTranslationCard.vue';
+import type { DefaultJsonTranslationResponse } from '@/types/Translation';
 import type { Page } from '@/types/Page';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
@@ -211,15 +217,16 @@ const handleWordHover = (sentenceIndex: number, partIndex: number, event: MouseE
   hoverState.value = { sentenceIndex, partIndex: isSpace(part) ? -1 : partIndex }
 }
 
-const handleTextClick = (sentenceIndex: number, partIndex: number, event: MouseEvent) => {
+const handleTextClick = async (sentenceIndex: number, partIndex: number, event: MouseEvent) => {
   const sentence = page.value?.sentences[sentenceIndex]
   if (!sentence) return
   const parts = splitSentence(sentence.originalText)
   const part = parts[partIndex]
+
   if (isSpace(part)) {
     showSentenceTranslation(sentence, event)
   } else {
-    showWordTranslation(part, event)
+    await showWordTranslation(part, event)
   }
 }
 
@@ -234,10 +241,6 @@ const showSentenceTranslation = (sentence: Sentence, event: MouseEvent) => {
   }, 10)
 }
 
-const showWordTranslation = (word: string, event: MouseEvent) => {
-  console.log('Word translation for:', word)
-}
-
 const isClickablePart = (part: string) => {
   return isSpace(part) || part.trim().length > 0
 }
@@ -247,5 +250,74 @@ const isPartHighlighted = (sentenceIndex: number, partIndex: number) => {
     return hoverState.value.partIndex === -1 || hoverState.value.partIndex === partIndex
   }
   return false
+}
+
+// Добавляем состояние для карточки слова
+const wordTranslationCard = reactive({
+  show: false,
+  word: '',
+  transcription: '',
+  definitions: [] as Array<{
+    pos: string
+    translations: Array<{
+      text: string
+      aspect?: string
+      meanings: string[]
+    }>
+  }>,
+  loading: false,
+  error: false,
+  x: 0,
+  y: 0
+})
+
+// Реализуем логику перевода слова
+const showWordTranslation = async (word: string, event: MouseEvent) => {
+  try {
+    wordTranslationCard.show = true
+    wordTranslationCard.word = word
+    wordTranslationCard.x = event.clientX
+    wordTranslationCard.y = event.clientY
+    wordTranslationCard.loading = true
+    wordTranslationCard.error = false
+
+    const response = await axios.get<DefaultJsonTranslationResponse>(
+      `http://localhost:8081/translations?text=${word}`
+    )
+
+    wordTranslationCard.transcription = response.data.definitions[0]?.ts || ''
+    wordTranslationCard.definitions = response.data.definitions.map((def: {
+      pos: string
+      translations: Array<{
+        text: string
+        asp?: string
+        meanings: string[]
+      }>
+    }) => ({
+      pos: def.pos,
+      translations: def.translations.map((tr: {
+        text: string
+        asp?: string
+        meanings: string[]
+      }) => ({
+        text: tr.text,
+        aspect: tr.asp,
+        meanings: tr.meanings
+      }))
+    }))
+  } catch (err) {
+    wordTranslationCard.error = true
+  } finally {
+    wordTranslationCard.loading = false
+  }
+
+  setTimeout(() => {
+    document.addEventListener('click', closeWordTranslationCard, { once: true })
+  }, 10)
+}
+
+const closeWordTranslationCard = () => {
+  wordTranslationCard.show = false
+  document.removeEventListener('click', closeWordTranslationCard)
 }
 </script>
