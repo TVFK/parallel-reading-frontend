@@ -103,6 +103,8 @@ import type { Chapter } from '@/types/Chapter';
 import type { Book } from '@/types/Book';
 import { useBookContextStore } from '@/stores/BookContextStore';
 import type { Sentence } from '@/types/Sentence';
+import { usePagesStore } from '@/stores/PageStore';
+import { useChaptersStore } from '@/stores/ChaptersStore';
 
 const route = useRoute();
 const router = useRouter();
@@ -111,6 +113,9 @@ const bookContextStore = useBookContextStore();
 const book = ref<Book | null>(null)
 const chapters = ref<Chapter[]>([])
 const page = ref<Page>();
+
+const pageStore = usePagesStore();
+const chaptersStore = useChaptersStore();
 
 const currentChapter = computed(() => {
   return chapters.value.find(chapter => chapter.id === page.value?.chapterId);
@@ -146,63 +151,19 @@ onMounted(async () => {
     await bookContextStore.fetchBookByTitle(route.params.bookTitle as string);
   }
   book.value = bookContextStore.currentBook;
-  const pageResponse = await axios.get<Page>(`http://localhost:8080/read/books/${book.value?.id}`, {
-    params: {
-      pageNumber: route.query.pageNumber,
-    },
-  });
-  if (!pageResponse.data) {
-    throw Error('Страница не найдена');
-  }
-  page.value = pageResponse.data;
-  fetchChaptersByBookId(book.value?.id as number)
+
+  await pageStore.fetchPageByBookId(book.value?.id as number, Number(route.query.pageNumber))
+  page.value = pageStore.currentPage;
+
+  chapters.value = chaptersStore.getChapters(book.value?.id as number);
 });
 
-async function fetchChaptersByBookId(bookId: number) {
-  try {
-    const response = await axios.get<Chapter[]>(`http://localhost:8080/books/${bookId}/chapters`)
-    chapters.value = response.data
-  } catch (err) {
-    console.log("ошибка при загрузке глав")
-  }
-}
-
 async function nextPage() {
-  try {
-    const response = await axios.get<Page>('http://localhost:8080/read/next', {
-      params: {
-        pageId: page.value?.id,
-      },
-    });
-    if (!response.data) {
-      throw Error('Страница не найдена');
-    }
-    page.value = response.data;
-    router.push({
-      query: { pageNumber: response.data.pageNumber },
-    });
-  } catch (error) {
-    console.error('Ошибка при загрузке следующей страницы:', error);
-  }
+  await pageStore.navigatePage('next')
 }
 
 async function prevPage() {
-  try {
-    const response = await axios.get<Page>('http://localhost:8080/read/prev', {
-      params: {
-        pageId: page.value?.id,
-      },
-    });
-    if (!response.data) {
-      throw Error('Страница не найдена');
-    }
-    page.value = response.data;
-    router.push({
-      query: { pageNumber: response.data.pageNumber },
-    });
-  } catch (error) {
-    console.error('Ошибка при загрузке предыдущей страницы:', error);
-  }
+  await pageStore.navigatePage('prev')
 }
 
 const hoverState = ref<{ sentenceIndex: number; partIndex: number } | null>(null)

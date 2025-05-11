@@ -1,15 +1,15 @@
 import type { Book } from '@/types/Book'
-import axios from 'axios'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { BooksService } from '@/api/books'
 
 export const useBookContextStore = defineStore('bookContextStore', () => {
   const currentBook = ref<Book | null>(null)
 
-  const fetchBookByTitle = async (title: String) => {
+  const fetchBookByTitle = async (title: string) => {
     try {
-      const response = await axios.get(`http://localhost:8080/books/${title}`)
-      currentBook.value = response.data
+      const response = await BooksService.fetchBookByTitle(title)
+      currentBook.value = response
     } catch (err) {
       console.error('Произошла ошибка:', err)
     }

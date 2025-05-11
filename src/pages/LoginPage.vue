@@ -34,28 +34,15 @@ const loginCredentials = reactive({
   login: '',
   password: '',
 });
-
-
-async function login() {
-  // try {
-  //   const response = await axios.post("http://localhost:8080/api/login", loginCredentials, {
-  //     headers: { "Content-Type": "application/json" },
-  //   });
-
-  //   if (response.status === 200) {
-  //     const result: PersonCredentials = response.data;
-  //     console.log("Вы успешно авторизовались:", result);
-
-  //     authStore.setCredentials(result);
-  //     router.push('/');
-  //   } else {
-  //     alert('Проверьте правильность логина или пароля');
-  //     throw new Error(`Ошибка HTTP: ${response.status}`);
-  //   }
-  // } catch (error) {
-  //   alert('Проверьте правильность логина или пароля');
-  //   console.error(`Ошибка HTTP: ${(error as any).response?.status || (error as Error).message}`);
-  // }
-}
+const login = async () => {
+  try {
+    const response = await axios.post('http://localhost:8000/api/login', loginCredentials);
+    console.log(response.data);
+    localStorage.setItem('token', response.data.token);
+    router.push('/');
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 </script>

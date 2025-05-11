@@ -52,17 +52,21 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
 import NavBar from '@/components/NavBar.vue';
 import BookList from '@/components/BookList.vue';
 import AppFooter from '@/components/AppFooter.vue';
-import type { Genre } from '@/types/Genre';
+import type { Book } from '@/types/Book'
+import { useGenresStore } from '@/stores/GenreStore';
+import { useBooksStore } from '@/stores/BooksStore';
 
 const route = useRoute();
 const router = useRouter();
 
-const books = ref([]);
-const genres = ref<Genre[]>([]);
+const genresStore = useGenresStore();
+const booksStore = useBooksStore();
+
+const books = booksStore.books;
+const genres = genresStore.genres;
 const levels = ['A1', 'A2', 'B1', 'B2', 'C1'];
 const showGenreDropdown = ref(false);
 const genreDropdown = ref<HTMLElement | null>(null);
@@ -76,31 +80,6 @@ const selectedGenres = computed(() =>
 const genresText = computed(() =>
   selectedGenres.value.length ? selectedGenres.value.join(', ') : 'Выберите жанры'
 );
-
-const fetchGenres = async () => {
-  try {
-    const response = await axios.get('http://localhost:8080/genres');
-    genres.value = response.data;
-  } catch (error) {
-    console.error('Ошибка загрузки жанров:', error);
-  }
-};
-
-const fetchBooks = async () => {
-  try {
-    const response = await axios.get('http://localhost:8080/books', {
-      params: {
-        title: route.query.title,
-        genres: route.query.genres,
-        level: route.query.level,
-        sort: currentSort.value
-      }
-    });
-    books.value = response.data;
-  } catch (error) {
-    console.error('Ошибка загрузки книг:', error);
-  }
-};
 
 const updateQuery = (params: Record<string, string | undefined>) => {
   router.push({
@@ -141,7 +120,7 @@ const handleClickOutside = (e: MouseEvent) => {
 };
 
 onMounted(() => {
-  fetchGenres();
+  genresStore.fetchGenres();
   document.addEventListener('click', handleClickOutside);
 });
 
@@ -149,5 +128,5 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside);
 });
 
-watch(() => route.query, fetchBooks, { immediate: true });
+watch(() => route.query, () => booksStore.fetchBooks(), { immediate: true });
 </script>

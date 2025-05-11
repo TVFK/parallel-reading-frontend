@@ -7,6 +7,7 @@ import CatalogPage from '@/pages/CatalogPage.vue'
 import AboutPage from '@/pages/AboutPage.vue'
 import RegistrationPage from '@/pages/RegistrationPage.vue'
 import SearchPage from '@/pages/SearchPage.vue'
+import E404 from '@/components/ErrorPage404.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,6 +51,10 @@ const router = createRouter({
       path: '/search',
       name: 'search',
       component: SearchPage,
+    },
+    {
+      path: '/:any(.*)',
+      component: E404,
     },
   ],
 })

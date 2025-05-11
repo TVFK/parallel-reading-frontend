@@ -9,8 +9,6 @@ export const useChaptersStore = defineStore('chaptersStore', () => {
   const error = ref<string | null>(null)
 
   const fetchChapters = async (bookId: number) => {
-    if (chaptersCache.has(bookId)) return
-
     loading.value = true
     try {
       const response = await axios.get<Chapter[]>(`http://localhost:8080/chapters/by-bookId`, {
