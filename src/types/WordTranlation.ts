@@ -1,4 +1,4 @@
-export interface DefaultJsonTranslationResponse {
+export interface WordTranslation {
   definitions: Array<{
     text: string
     pos: string

@@ -55,7 +55,6 @@ import { useRoute, useRouter } from 'vue-router';
 import NavBar from '@/components/NavBar.vue';
 import BookList from '@/components/BookList.vue';
 import AppFooter from '@/components/AppFooter.vue';
-import type { Book } from '@/types/Book'
 import { useGenresStore } from '@/stores/GenreStore';
 import { useBooksStore } from '@/stores/BooksStore';
 
