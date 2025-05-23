@@ -21,18 +21,17 @@ export const useBooksStore = defineStore('booksStore', () => {
     }
   }
 
-  const fetchBooks = async () => {
+  const fetchBooks = async (params: {
+    title?: string
+    genres?: string
+    level?: string
+    sort?: string
+  }) => {
     isLoading.value = true
     try {
-      books.value = await BooksService.fetchBooks({
-        title: router.currentRoute.value.query.title?.toString(),
-        genres: router.currentRoute.value.query.genres?.toString(),
-        level: router.currentRoute.value.query.level?.toString(),
-        sort: router.currentRoute.value.query.sort?.toString(),
-      })
+      books.value = await BooksService.fetchBooks(params) // Передаём параметры из аргументов
     } catch (err) {
-      error.value = 'Ошибка загрузки книг'
-      console.error(err)
+      error.value = 'Ошибка загрузки'
     } finally {
       isLoading.value = false
     }

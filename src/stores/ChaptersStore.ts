@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import { ref } from 'vue'
 import type { Chapter } from '@/types/Chapter'
+import { ChaptersService } from '@/api/chapters'
 
 export const useChaptersStore = defineStore('chaptersStore', () => {
   const chaptersCache = new Map<number, Chapter[]>()
@@ -11,10 +12,8 @@ export const useChaptersStore = defineStore('chaptersStore', () => {
   const fetchChapters = async (bookId: number) => {
     loading.value = true
     try {
-      const response = await axios.get<Chapter[]>(`http://localhost:8080/chapters/by-bookId`, {
-        params: { bookId },
-      })
-      chaptersCache.set(bookId, response.data)
+      const response = await ChaptersService.fetchChaptersByBookId(bookId)
+      chaptersCache.set(bookId, response)
     } catch (err) {
       error.value = 'Ошибка при загрузке глав'
     } finally {

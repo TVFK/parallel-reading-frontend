@@ -3,7 +3,7 @@ import type { Sentence } from '@/types/Sentence'
 import { useTranslationStore } from '@/stores/TranlationStore'
 
 export function useTranslationCard(translationStore = useTranslationStore()) {
-  const translationCard = reactive({
+  const sentenceTranslationCard = reactive({
     show: false,
     original: '',
     text: '',
@@ -32,7 +32,7 @@ export function useTranslationCard(translationStore = useTranslationStore()) {
   })
 
   const closeTranslationCard = () => {
-    translationCard.show = false
+    sentenceTranslationCard.show = false
     document.removeEventListener('click', closeTranslationCard)
   }
 
@@ -42,11 +42,11 @@ export function useTranslationCard(translationStore = useTranslationStore()) {
   }
 
   const showSentenceTranslation = (sentence: Sentence, event: MouseEvent) => {
-    translationCard.original = sentence.originalText
-    translationCard.text = sentence.translatedText
-    translationCard.x = event.clientX
-    translationCard.y = event.clientY
-    translationCard.show = true
+    sentenceTranslationCard.original = sentence.originalText
+    sentenceTranslationCard.text = sentence.translatedText
+    sentenceTranslationCard.x = event.clientX
+    sentenceTranslationCard.y = event.clientY
+    sentenceTranslationCard.show = true
     setTimeout(() => {
       document.addEventListener('click', closeTranslationCard, { once: true })
     }, 10)
@@ -54,15 +54,17 @@ export function useTranslationCard(translationStore = useTranslationStore()) {
 
   const showWordTranslation = async (word: string, event: MouseEvent) => {
     try {
-      wordTranslationCard.show = true
       wordTranslationCard.word = word
-      wordTranslationCard.x = event.clientX
-      wordTranslationCard.y = event.clientY
       wordTranslationCard.loading = true
       wordTranslationCard.error = false
 
-      const wordTranslation = translationStore.getTranslation(word)
+      const wordTranslation = await translationStore.getTranslation(word)
 
+      if (wordTranslation) {
+        wordTranslationCard.show = true
+        wordTranslationCard.x = event.clientX
+        wordTranslationCard.y = event.clientY
+      }
       wordTranslationCard.transcription = wordTranslation.definitions[0]?.ts || ''
       wordTranslationCard.definitions = wordTranslation.definitions.map(
         (def: {
@@ -95,7 +97,7 @@ export function useTranslationCard(translationStore = useTranslationStore()) {
   }
 
   return {
-    translationCard,
+    sentenceTranslationCard,
     wordTranslationCard,
     showSentenceTranslation,
     showWordTranslation,

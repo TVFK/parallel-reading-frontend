@@ -16,7 +16,7 @@
       :on-click="handleTextClick" :is-highlighted="isPartHighlighted" />
 
     <!-- Translation Cards -->
-    <SentenceTranslationCard v-bind="translationCard" />
+    <SentenceTranslationCard v-bind="sentenceTranslationCard" />
     <WordTranslationCard v-bind="wordTranslationCard" />
 
     <!-- Pagination Controls -->
@@ -50,7 +50,7 @@ const sentences = computed(() => page.value?.sentences || []);
 
 // translation cards and handlers
 const {
-  translationCard,
+  sentenceTranslationCard,
   wordTranslationCard,
   showSentenceTranslation,
   showWordTranslation
@@ -70,20 +70,17 @@ const {
 
 // wrap hover to accept null args
 function handleHover(i: number | null, j: number | null, e: MouseEvent) {
-  if (i === null || j === null) {
-    // clear highlight
-    handleWordHover(-1, -1, e); // your composable should treat negative indices as clear
-  } else {
-    handleWordHover(i, j, e);
-  }
+  handleWordHover(i, j, e);
 }
 
 // computed current chapter for title
 const currentChapter = computed(() =>
   chapters.value.find(ch => ch.id === page.value?.chapterId) || null
 );
+console.log(currentChapter);
 
 // UI state
 const showChapters = ref(false);
 const showSettings = ref(false);
+
 </script>

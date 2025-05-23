@@ -1,5 +1,5 @@
 <template>
-  <div
+  <div v-if="show"
     class="fixed z-50 p-4 bg-white border border-gray-200 rounded-lg shadow-lg max-w-xs w-full max-h-[70vh] overflow-y-auto"
     :style="{
       left: `${x}px`,
@@ -70,6 +70,7 @@
 
 <script setup lang="ts">
 defineProps<{
+  show: boolean
   word: string
   x: number
   y: number

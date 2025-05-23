@@ -57,6 +57,7 @@ import BookList from '@/components/BookList.vue';
 import AppFooter from '@/components/AppFooter.vue';
 import { useGenresStore } from '@/stores/GenreStore';
 import { useBooksStore } from '@/stores/BooksStore';
+import { storeToRefs } from 'pinia';
 
 const route = useRoute();
 const router = useRouter();
@@ -64,8 +65,8 @@ const router = useRouter();
 const genresStore = useGenresStore();
 const booksStore = useBooksStore();
 
-const books = booksStore.books;
-const genres = genresStore.genres;
+const { books } = storeToRefs(booksStore);
+const { genres } = storeToRefs(genresStore);
 const levels = ['A1', 'A2', 'B1', 'B2', 'C1'];
 const showGenreDropdown = ref(false);
 const genreDropdown = ref<HTMLElement | null>(null);
@@ -118,8 +119,14 @@ const handleClickOutside = (e: MouseEvent) => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
   genresStore.fetchGenres();
+  booksStore.fetchBooks({
+    title: route.query.title?.toString(),
+    genres: route.query.genres?.toString(),
+    level: route.query.level?.toString(),
+    sort: route.query.sort?.toString()
+  });
   document.addEventListener('click', handleClickOutside);
 });
 
@@ -127,5 +134,13 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside);
 });
 
-watch(() => route.query, () => booksStore.fetchBooks(), { immediate: true });
+watch(() => route.query, (query) => {
+  booksStore.fetchBooks({
+    title: query.title?.toString(),
+    genres: query.genres?.toString(),
+    level: query.level?.toString(),
+    sort: query.sort?.toString()
+  });
+}, { immediate: true });
+
 </script>

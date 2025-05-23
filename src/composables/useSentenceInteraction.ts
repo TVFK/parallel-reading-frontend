@@ -14,11 +14,26 @@ export function useSentenceInteraction(
   const splitSentence = (text: string) => text.split(/(\s+)/)
   const isSpace = (part: string) => /\s+/.test(part)
 
-  function handleWordHover(sentenceIndex: number, partIndex: number, event: MouseEvent) {
+  function handleWordHover(
+    sentenceIndex: number | null,
+    partIndex: number | null,
+    event: MouseEvent,
+  ) {
+    // Обрабатываем случай, когда курсор ушел (переданы null)
+    if (sentenceIndex === null || partIndex === null) {
+      hoverState.value = null
+      return
+    }
+
     const sentences = pageRef.value
-    if (!sentences) return
+    if (!sentences || sentenceIndex < 0 || partIndex < 0) return
+
     const part = splitSentence(sentences[sentenceIndex].originalText)[partIndex]
-    hoverState.value = { sentenceIndex, partIndex: isSpace(part) ? -1 : partIndex }
+    hoverState.value = {
+      sentenceIndex,
+      partIndex: isSpace(part) ? -1 : partIndex,
+    }
+    event.stopPropagation()
   }
 
   async function handleTextClick(sentenceIndex: number, partIndex: number, event: MouseEvent) {

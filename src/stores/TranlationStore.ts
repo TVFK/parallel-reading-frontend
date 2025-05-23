@@ -15,9 +15,9 @@ export const useTranslationStore = defineStore('translationStore', () => {
     }
   }
 
-  const getTranslation = (text: string): WordTranslation => {
+  const getTranslation = async (text: string): Promise<WordTranslation> => {
     if (!translationsCache.has(text)) {
-      fetchTranslation(text)
+      await fetchTranslation(text)
     }
     return translationsCache.get(text) as WordTranslation
   }

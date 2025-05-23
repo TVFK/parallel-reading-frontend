@@ -41,6 +41,8 @@ export function useBookLoader(route: RouteLocationNormalizedLoaded) {
     book.value = bookContextStore.currentBook
 
     if (book.value) {
+      await chaptersStore.fetchChapters(book.value.id)
+      chapters.value = chaptersStore.getChapters(book.value.id)
       await pageStore.fetchPageByBookId(book.value.id, pageNumber)
       page.value = pageStore.currentPage
       chapters.value = chaptersStore.getChapters(book.value.id)
