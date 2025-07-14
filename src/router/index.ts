@@ -8,6 +8,7 @@ import AboutPage from '@/pages/AboutPage.vue'
 import RegistrationPage from '@/pages/RegistrationPage.vue'
 import SearchPage from '@/pages/SearchPage.vue'
 import E404 from '@/components/ErrorPage404.vue'
+import DictionaryPage from '@/pages/DictionaryPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,11 @@ const router = createRouter({
       path: '/books/:bookTitle',
       name: 'read',
       component: ReadPage,
+    },
+    {
+      path: '/dictionary',
+      name: 'dictionary',
+      component: DictionaryPage,
     },
     {
       path: '/registration',

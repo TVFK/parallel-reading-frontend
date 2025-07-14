@@ -15,6 +15,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@josempgon/vue-keycloak": "^3.3.1",
     "@tailwindcss/vite": "^4.0.7",
     "axios": "^1.7.9",
     "pinia": "^3.0.1",
