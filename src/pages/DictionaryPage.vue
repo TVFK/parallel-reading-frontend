@@ -7,14 +7,25 @@
       <DictionaryFilters v-model:sortOption="sortOption" :filters="filters" :active-filters="activeFilters"
         @toggle-filter="toggleFilter" class="mt-8" />
 
-      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <DictCard v-for="(word, index) in words" :key="index" :word="word" @edit="editWord(word)"
-          @delete="deleteWord(word)" />
+      <div v-if="dictionaryStore.isLoading" class="flex justify-center mt-20">
+        <Spinner /> <!-- Ваш компонент загрузки -->
       </div>
 
-      <div class="mt-12 flex justify-center">
-        <DictionaryPagination :current-page="currentPage" :total-pages="5" @change-page="changePage"
-          @prev-page="prevPage" @next-page="nextPage" />
+      <div v-else>
+        <div v-if="words.length > 0" class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <DictCard v-for="word in words" :key="word.id" :word="word" @edit="editWord(word)"
+            @delete="deleteWord(word)" />
+        </div>
+        <div v-else class="flex h-screen items-center justify-center">
+          <h1 class="text-3xl font-bold text-[#2D2D2D]">
+            У вас пока не добавлено ни одной карточки!
+          </h1>
+        </div>
+
+        <div v-if="dictionaryStore.totalPages > 1" class="mt-12 flex justify-center">
+          <DictionaryPagination :current-page="currentPage" :total-pages="dictionaryStore.totalPages"
+            @change-page="changePage" @prev-page="prevPage" @next-page="nextPage" />
+        </div>
       </div>
     </div>
     <AppFooter />
@@ -31,85 +42,19 @@ import DictionaryPagination from '@/components/dictoinary-page/DictionaryPaginat
 import type { DictionaryCard } from '@/types/DictionaryCard';
 import { onMounted, ref } from 'vue';
 import { useDictionaryStore } from '@/stores/DictionaryStore';
+import { useRouter } from 'vue-router';
+import { watch } from 'vue';
 
-const dictionaryStore = useDictionaryStore()
+const dictionaryStore = useDictionaryStore();
+const router = useRouter();
 
-// Фильтры и сортировка
 const sortOption = ref('date');
-const currentPage = ref(1);
+const currentPage = ref(0); // Теперь 0-based как в бэкенде
+const pageSize = 10;
 const filters = ['Глаголы', 'Существительные', 'Прилагательные', 'Идиомы', 'Для повторения'];
 const activeFilters = ref<string[]>([]);
-const words = ref<DictionaryCard[]>([])
+const words = ref<DictionaryCard[]>([]);
 
-onMounted(async () => {
-  await dictionaryStore.fetchDictionaryCards()
-  words.value = dictionaryStore.dictionaryCards
-})
-// // Заглушки данных
-// const words = ref<DictionaryCard[]>([
-//   {
-//     id: 1,
-//     word: "elaborate",
-//     translation: "тщательно разработанный",
-//     context: "The company has an elaborate security system.",
-//     createdAt: "15.05.2024",
-//     nextReview: "22.05.2024",
-//     difficulty: 2,
-//     tags: ["прилагательное", "формальный"]
-//   },
-//   {
-//     id: 1,
-//     word: "dwindle",
-//     translation: "постепенно уменьшаться",
-//     context: "Resources have dwindled to a critical level.",
-//     createdAt: "12.05.2024",
-//     nextReview: "19.05.2024",
-//     difficulty: 3,
-//     tags: ["глагол"]
-//   },
-//   {
-//     id: 1,
-//     word: "benevolent",
-//     translation: "доброжелательный",
-//     context: "He gave a benevolent smile to the children.",
-//     createdAt: "10.05.2024",
-//     nextReview: "17.05.2024",
-//     difficulty: 1,
-//     tags: ["прилагательное", "характер"]
-//   },
-//   {
-//     id: 1,
-//     word: "scrutinize",
-//     translation: "тщательно изучать",
-//     context: "The committee will scrutinize all proposals.",
-//     createdAt: "08.05.2024",
-//     nextReview: "15.05.2024",
-//     difficulty: 3,
-//     tags: ["глагол", "формальный"]
-//   },
-//   {
-//     id: 1,
-//     word: "ubiquitous",
-//     translation: "вездесущий",
-//     context: "Mobile phones are now ubiquitous in modern society.",
-//     createdAt: "05.05.2024",
-//     nextReview: "12.05.2024",
-//     difficulty: 2,
-//     tags: ["прилагательное"]
-//   },
-//   {
-//     id: 1,
-//     word: "meticulous",
-//     translation: "дотошный",
-//     context: "She is meticulous about keeping records.",
-//     createdAt: "02.05.2024",
-//     nextReview: "09.05.2024",
-//     difficulty: 2,
-//     tags: ["прилагательное", "характер"]
-//   }
-// ]);
-
-// Методы
 const startLearning = () => {
   console.log('Начать обучение словам');
 };
@@ -123,28 +68,60 @@ const toggleFilter = (filter: string) => {
 };
 
 const editWord = (word: DictionaryCard) => {
-  console.log('Редактировать слово:', word);
+  router.push(`/dictionary/edit/${word.id}`)
 };
 
-const deleteWord = (word: DictionaryCard) => {
-  console.log('Удалить слово:', word);
+// Загрузка данных с параметрами
+const loadData = async () => {
+  await dictionaryStore.fetchDictionaryCards(
+    currentPage.value,
+    pageSize,
+    sortOption.value
+  );
+  words.value = dictionaryStore.dictionaryCards;
 };
 
+// Первоначальная загрузка
+onMounted(loadData);
+
+// Реакция на изменение сортировки
+watch(sortOption, () => {
+  currentPage.value = 0; // Сброс на первую страницу
+  loadData();
+});
+
+// Обработчики пагинации
 const changePage = (page: number) => {
-  currentPage.value = page;
+  currentPage.value = page - 1; // Конвертируем в 0-based
+  loadData();
 };
 
 const prevPage = () => {
-  if (currentPage.value > 1) {
+  if (currentPage.value > 0) {
     currentPage.value--;
+    loadData();
   }
 };
 
 const nextPage = () => {
-  if (currentPage.value < 5) {
+  if (currentPage.value < dictionaryStore.totalPages - 1) {
     currentPage.value++;
+    loadData();
   }
 };
+
+// Обработка удаления с проверкой страницы
+const deleteWord = async (word: DictionaryCard) => {
+  await dictionaryStore.deleteDictionaryCard(word.id);
+
+  // Если удалили последний элемент на странице
+  if (words.value.length === 1 && currentPage.value > 0) {
+    currentPage.value--;
+  }
+
+  loadData();
+};
+
 </script>
 
 <style scoped>

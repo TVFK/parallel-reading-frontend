@@ -1,7 +1,7 @@
 export interface NewDictionaryCard {
-  word?: string
-  translation?: string
+  word: string
+  translation: string
   context?: string
-  difficulty?: number
+  difficulty: number
   tags?: string[]
 }

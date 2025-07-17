@@ -9,6 +9,7 @@ import RegistrationPage from '@/pages/RegistrationPage.vue'
 import SearchPage from '@/pages/SearchPage.vue'
 import E404 from '@/components/ErrorPage404.vue'
 import DictionaryPage from '@/pages/DictionaryPage.vue'
+import CreateDictCardPage from '@/pages/CreateDictCardPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,16 @@ const router = createRouter({
       path: '/dictionary',
       name: 'dictionary',
       component: DictionaryPage,
+    },
+    {
+      path: '/dictionary/create',
+      name: 'CreateCard',
+      component: CreateDictCardPage,
+    },
+    {
+      path: '/dictionary/edit/:id',
+      name: 'EditCard',
+      component: CreateDictCardPage,
     },
     {
       path: '/registration',

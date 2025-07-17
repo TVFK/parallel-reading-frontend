@@ -20,6 +20,14 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 npm install
 ```
 
+```sh
+npm install @josempgon/vue-keycloak
+```
+
+```sh
+npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
+```
+
 ### Compile and Hot-Reload for Development
 
 ```sh

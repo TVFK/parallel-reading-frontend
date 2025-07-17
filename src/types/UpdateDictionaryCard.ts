@@ -3,5 +3,5 @@ export interface UpdateDictionaryCard {
   translation?: string
   context?: string
   tags?: string[]
-  difficulty?: number
+  difficulty: number
 }

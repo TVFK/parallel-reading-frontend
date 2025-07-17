@@ -27,7 +27,8 @@
         <span>Каталог</span>
       </div>
 
-      <div class="cursor-pointer flex flex-col items-center text-sm hover:scale-105 transition-transform">
+      <div @click="$router.push('/dictionary')"
+        class="cursor-pointer flex flex-col items-center text-sm hover:scale-105 transition-transform">
         <IconMyBooks class="w-8 h-8 text-gray-800" />
         <span>Словарь</span>
       </div>

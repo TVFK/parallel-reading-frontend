@@ -1,5 +1,5 @@
 export interface DictionaryCard {
-  id: number
+  id: string
   word: string
   translation: string
   context: string

@@ -5,12 +5,42 @@ import type { UpdateDictionaryCard } from '@/types/UpdateDictionaryCard'
 import axios from 'axios'
 
 export const DictionaryService = {
-  async fetchDictionaryCards(): Promise<DictionaryCard[]> {
+  async fetchDictionaryCardById(cardId: string): Promise<DictionaryCard> {
     try {
-      const response = await dictionaryApi.get<DictionaryCard[]>('/dictionary')
+      const response = await dictionaryApi.get<DictionaryCard>(`/dictionary/${cardId}`)
       return response.data
     } catch (error) {
-      console.error('Ошибка при получении слэш-карт пользователя:', error)
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 400) {
+          const validationErrors = error.response.data
+          throw new Error(validationErrors)
+        }
+        if (error.response?.status === 403) {
+          throw new Error('Недостаточно прав для изменения карточки')
+        }
+        if (error.response?.status === 404) {
+          throw new Error('Карточка не найдена')
+        }
+      }
+      throw new Error('Ошибка при обновлении карточки')
+    }
+  },
+
+  async fetchDictionaryCards(
+    page: number,
+    size: number,
+    sort: string,
+  ): Promise<{ content: DictionaryCard[]; totalPages: number }> {
+    try {
+      const response = await dictionaryApi.get('/dictionary', {
+        params: { page, size, sort },
+      })
+      return {
+        content: response.data.content,
+        totalPages: response.data.totalPages,
+      }
+    } catch (error) {
+      console.error('Ошибка при получении карточек словаря:', error)
       throw error
     }
   },
@@ -33,7 +63,7 @@ export const DictionaryService = {
     }
   },
 
-  async updateDictionaryCard(cardId: number, card: UpdateDictionaryCard): Promise<void> {
+  async updateDictionaryCard(cardId: string, card: UpdateDictionaryCard): Promise<void> {
     try {
       const response = await dictionaryApi.patch(`/dictionary/${cardId}`, card)
       return response.data
@@ -54,7 +84,7 @@ export const DictionaryService = {
     }
   },
 
-  async deleteDictionaryCard(cardId: number): Promise<void> {
+  async deleteDictionaryCard(cardId: string): Promise<void> {
     try {
       const response = await dictionaryApi.delete(`/dictionary/${cardId}`)
       return response.data
