@@ -1,6 +1,7 @@
 import { dictionaryApi } from '@/api/http'
 import type { DictionaryCard } from '@/types/DictionaryCard'
 import type { NewDictionaryCard } from '@/types/NewDictionaryCard'
+import type { ReviewCard } from '@/types/ReviewCard'
 import type { UpdateDictionaryCard } from '@/types/UpdateDictionaryCard'
 import axios from 'axios'
 
@@ -23,6 +24,41 @@ export const DictionaryService = {
         }
       }
       throw new Error('Ошибка при обновлении карточки')
+    }
+  },
+
+  async fetchReviewCards(
+    page = 0,
+    size = 50,
+  ): Promise<{ content: DictionaryCard[]; totalPages: number }> {
+    try {
+      const response = await dictionaryApi.get('/dictionary/review', {
+        params: { page, size },
+      })
+      return {
+        content: response.data.content,
+        totalPages: response.data.totalPages,
+      }
+    } catch (error) {
+      console.error('Ошибка при получении карточек словаря:', error)
+      throw error
+    }
+  },
+
+  async reviewCard(reviewedCard: ReviewCard): Promise<void> {
+    try {
+      return await dictionaryApi.post('/dictionary/review', reviewedCard)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 400) {
+          const validationErrors = error.response.data
+          throw new Error(validationErrors)
+        }
+        if (error.response?.status === 403) {
+          throw new Error('Недостаточно прав для изменения карточки')
+        }
+      }
+      throw new Error('Ошибка при ревью карты')
     }
   },
 

@@ -4,9 +4,11 @@ import type { DictionaryCard } from '@/types/DictionaryCard'
 import { ref } from 'vue'
 import type { NewDictionaryCard } from '@/types/NewDictionaryCard'
 import type { UpdateDictionaryCard } from '@/types/UpdateDictionaryCard'
+import type { ReviewCard } from '@/types/ReviewCard'
 
 export const useDictionaryStore = defineStore('dictionaryStore', () => {
   const dictionaryCards = ref<DictionaryCard[]>([])
+  const reviewCards = ref<DictionaryCard[]>([])
   const totalPages = ref(0)
   const isLoading = ref(false)
 
@@ -38,8 +40,23 @@ export const useDictionaryStore = defineStore('dictionaryStore', () => {
     return await DictionaryService.fetchDictionaryCardById(cardId)
   }
 
+  const fetchReviewCards = async () => {
+    isLoading.value = true
+    try {
+      const response = await DictionaryService.fetchReviewCards()
+      reviewCards.value = response.content
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const reviewCard = async (reviewDTO: ReviewCard) => {
+    await DictionaryService.reviewCard(reviewDTO)
+  }
+
   return {
     dictionaryCards,
+    reviewCards,
     totalPages,
     isLoading,
     fetchDictionaryCards,
@@ -47,5 +64,7 @@ export const useDictionaryStore = defineStore('dictionaryStore', () => {
     updateDictionaryCard,
     deleteDictionaryCard,
     getCardById,
+    fetchReviewCards,
+    reviewCard,
   }
 })

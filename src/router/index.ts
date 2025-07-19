@@ -10,6 +10,7 @@ import SearchPage from '@/pages/SearchPage.vue'
 import E404 from '@/components/ErrorPage404.vue'
 import DictionaryPage from '@/pages/DictionaryPage.vue'
 import CreateDictCardPage from '@/pages/CreateDictCardPage.vue'
+import LearningPage from '@/pages/LearningPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,13 +42,18 @@ const router = createRouter({
     },
     {
       path: '/dictionary/create',
-      name: 'CreateCard',
+      name: 'create-card',
       component: CreateDictCardPage,
     },
     {
       path: '/dictionary/edit/:id',
-      name: 'EditCard',
+      name: 'edit-cartd',
       component: CreateDictCardPage,
+    },
+    {
+      path: '/learn',
+      name: 'learning',
+      component: LearningPage,
     },
     {
       path: '/registration',

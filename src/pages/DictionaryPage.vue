@@ -8,7 +8,7 @@
         @toggle-filter="toggleFilter" class="mt-8" />
 
       <div v-if="dictionaryStore.isLoading" class="flex justify-center mt-20">
-        <Spinner /> <!-- Ваш компонент загрузки -->
+        Идёт загрузка
       </div>
 
       <div v-else>
@@ -49,14 +49,14 @@ const dictionaryStore = useDictionaryStore();
 const router = useRouter();
 
 const sortOption = ref('date');
-const currentPage = ref(0); // Теперь 0-based как в бэкенде
-const pageSize = 10;
+const currentPage = ref(0);
+const pageSize = 9;
 const filters = ['Глаголы', 'Существительные', 'Прилагательные', 'Идиомы', 'Для повторения'];
 const activeFilters = ref<string[]>([]);
 const words = ref<DictionaryCard[]>([]);
 
 const startLearning = () => {
-  console.log('Начать обучение словам');
+  router.push('/learn')
 };
 
 const toggleFilter = (filter: string) => {
@@ -71,7 +71,6 @@ const editWord = (word: DictionaryCard) => {
   router.push(`/dictionary/edit/${word.id}`)
 };
 
-// Загрузка данных с параметрами
 const loadData = async () => {
   await dictionaryStore.fetchDictionaryCards(
     currentPage.value,
@@ -81,18 +80,15 @@ const loadData = async () => {
   words.value = dictionaryStore.dictionaryCards;
 };
 
-// Первоначальная загрузка
 onMounted(loadData);
 
-// Реакция на изменение сортировки
 watch(sortOption, () => {
-  currentPage.value = 0; // Сброс на первую страницу
+  currentPage.value = 0;
   loadData();
 });
 
-// Обработчики пагинации
 const changePage = (page: number) => {
-  currentPage.value = page - 1; // Конвертируем в 0-based
+  currentPage.value = page - 1;
   loadData();
 };
 
@@ -110,11 +106,9 @@ const nextPage = () => {
   }
 };
 
-// Обработка удаления с проверкой страницы
 const deleteWord = async (word: DictionaryCard) => {
   await dictionaryStore.deleteDictionaryCard(word.id);
 
-  // Если удалили последний элемент на странице
   if (words.value.length === 1 && currentPage.value > 0) {
     currentPage.value--;
   }
