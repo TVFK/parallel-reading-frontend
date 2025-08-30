@@ -1,0 +1,15 @@
+FROM node:20-alpine as build-stage
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm ci
+
+COPY . .
+
+RUN npm run build
+
+FROM alpine as production-stage
+
+COPY --from=build-stage /app/dist /app/dist
