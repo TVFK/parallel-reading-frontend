@@ -77,7 +77,6 @@ function handleHover(i: number | null, j: number | null, e: MouseEvent) {
 const currentChapter = computed(() =>
   chapters.value.find(ch => ch.id === page.value?.chapterId) || null
 );
-console.log(currentChapter);
 
 // UI state
 const showChapters = ref(false);

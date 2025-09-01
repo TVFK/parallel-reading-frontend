@@ -3,7 +3,7 @@ import { useKeycloak, getToken } from '@josempgon/vue-keycloak'
 
 const BOOKS_API_URL = import.meta.env.VITE_BOOKS_API_URL || 'http://localhost:8080'
 const TRANSLATION_URL = import.meta.env.VITE_API_TRANSLATION_URL || 'http://localhost:8081'
-const DICTIONARY_URL = import.meta.env.VITE_API_TRANSLATION_URL || 'http://localhost:8085'
+const DICTIONARY_URL = import.meta.env.VITE_API_DICTIONARY_URL || 'http://localhost:8085'
 const keycloak = useKeycloak()
 
 const createApiInstance = (baseURL: string): AxiosInstance => {

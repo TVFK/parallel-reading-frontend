@@ -29,7 +29,7 @@ export const useBooksStore = defineStore('booksStore', () => {
   }) => {
     isLoading.value = true
     try {
-      books.value = await BooksService.fetchBooks(params) // Передаём параметры из аргументов
+      books.value = await BooksService.fetchBooks(params)
     } catch (err) {
       error.value = 'Ошибка загрузки'
     } finally {

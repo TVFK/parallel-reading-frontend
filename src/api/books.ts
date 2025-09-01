@@ -8,7 +8,7 @@ export const BooksService = {
   },
 
   async fetchBookByTitle(bookTitle: string): Promise<Book> {
-    const response = await booksApi.get<Book>(`/books/${bookTitle}`)
+    const response = await booksApi.get<Book>(`/books/by-title/${bookTitle}`)
     return response.data
   },
 

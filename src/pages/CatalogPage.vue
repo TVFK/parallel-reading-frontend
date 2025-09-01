@@ -45,11 +45,11 @@ import { computed, onMounted } from 'vue';
 const booksStore = useBooksStore();
 const router = useRouter();
 const levels = [
-  "Beginner A1 - уровень выживания (Breakthrough)",
-  "Pre-intermediate A2 - предпороговый уровень (Waystage)",
-  "Intermediate B1 - пороговый уровень (Threshold)",
-  "Upper-intermediate B2 - пороговый продвинутый уровень (Vantage)",
-  "Advanced C1 - уровень профессионального владения (Effective operational proficiency)"
+  "Beginner A1 - Начинающий",
+  "Pre-intermediate A2 - Элементарный уровень",
+  "Intermediate B1 - Средний уровень",
+  "Upper-intermediate B2 - Пороговый продвинутый уровень",
+  "Advanced C1 - Продвинутый уровень"
 ]
 
 const booksWithLevels = computed(() => {

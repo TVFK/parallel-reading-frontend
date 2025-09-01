@@ -11,7 +11,7 @@ const initApp = async () => {
 
   await vueKeycloak.install(app, {
     config: {
-      url: 'http://localhost:8082',
+      url: import.meta.env.VITE_KEYCLOAK_URL,
       realm: 'boolkus',
       clientId: 'vue-client',
     },

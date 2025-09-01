@@ -3,8 +3,8 @@
   <div class="container mx-auto mt-20 px-4">
     <div class="flex flex-wrap items-center gap-4 mb-6">
       <select :value="currentSort" @change="updateSort" class="p-2 border rounded cursor-pointer">
-        <option value="publishedYear,asc">По дате выпуска</option>
-        <option value="level,asc">По сложности</option>
+        <option value="publishedYear,asc">По дате выпуска ⭡</option>
+        <option value="level,asc">По сложности ⭡</option>
       </select>
 
       <select :value="currentLevel" @change="updateLevel" class="p-2 border rounded cursor-pointer">
