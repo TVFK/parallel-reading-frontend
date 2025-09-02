@@ -29,7 +29,7 @@ const props = defineProps({
 });
 
 const bookImageUrl = computed(() => {
-  return props.book ? `http://localhost:8080/${props.book.imageUrl}` : '';
+  return props.book ? `/minio/covers/${props.book.imageUrl}` : '';
 });
 
 const bookContextStore = useBookContextStore();

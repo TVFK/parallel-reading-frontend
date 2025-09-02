@@ -77,7 +77,7 @@ const loading = ref(true);
 const error = ref<string | null>(null);
 
 const bookImageUrl = computed(() => {
-  return book.value ? `http://localhost:8080/${book.value.imageUrl}` : '';
+  return book.value ? `/minio/covers/${book.value.imageUrl}` : '';
 });
 const bookContextStore = useBookContextStore();
 

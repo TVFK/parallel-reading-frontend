@@ -67,21 +67,6 @@ const registrationCredentials = reactive({
 
 
 async function register() {
-  // try {
-  //   const response = await axios.post("http://localhost:8080/api/register", registrationCredentials, {
-  //     headers: { "Content-Type": "application/json" },
-  //   });
-
-  //   if (response.status === 201) {
-  //     console.log('Регистрация прошла успешно!', response.data);
-  //     router.push('/login');
-  //   } else {
-  //     alert('Что-то пошло не так');
-  //     console.error("Что-то пошло не так", response);
-  //   }
-  // } catch (error) {
-  //   console.error(`Ошибка HTTP: ${(error as any).response?.status || (error as Error).message}`);
-  // }
 }
 
 </script>
