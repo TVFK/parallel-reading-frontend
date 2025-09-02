@@ -1,10 +1,7 @@
 <template>
-  <div v-if="show"
-    class="fixed z-50 p-4 bg-white border border-gray-200 rounded-lg shadow-lg max-w-xs w-full max-h-[70vh] overflow-y-auto"
-    :style="{
-      left: `${x}px`,
-      top: `${y + 20}px`
-    }">
+  <div v-if="show" ref="cardRef"
+    class="fixed z-50 p-5 bg-white border border-gray-200 rounded-xl shadow-xl max-w-xs w-full max-h-[70vh] overflow-y-auto cursor-default transition-all duration-200 ease-out"
+    :style="{ left: `${adjustedX}px`, top: `${adjustedY}px` }" @click.stop>
     <!-- Лоадер -->
     <div v-if="loading" class="flex justify-center items-center h-20">
       <svg class="animate-spin h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -17,14 +14,14 @@
     </div>
 
     <!-- Ошибка -->
-    <div v-else-if="error" class="text-red-500 p-4">
+    <div v-else-if="error" class="text-red-500 p-4 text-sm">
       Ошибка при загрузке перевода
     </div>
 
     <!-- Контент -->
     <div v-else>
       <!-- Заголовок с словом -->
-      <div class="flex items-center justify-between border-b pb-2 mb-2">
+      <div class="flex items-center justify-between border-b border-gray-200 pb-2 mb-3">
         <h3 class="text-lg font-bold text-gray-800">{{ word }}</h3>
         <span v-if="transcription" class="text-sm text-gray-500 ml-2">[{{ transcription }}]</span>
       </div>
@@ -40,7 +37,7 @@
           <!-- Список переводов -->
           <ul class="space-y-2 pl-2">
             <li v-for="(trans, tIndex) in definition.translations" :key="tIndex" class="translation-item">
-              <div class="font-medium text-gray-800">{{ trans.text }}</div>
+              <div class="font-medium text-gray-800 text-sm">{{ trans.text }}</div>
 
               <!-- Дополнительная информация -->
               <div v-if="trans.aspect || trans.meanings.length" class="text-xs text-gray-500 mt-1 space-y-1">
@@ -69,7 +66,10 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import { ref, computed, onMounted } from 'vue'
+import { useTranslationCard } from '@/composables/useTranslationCard'
+
+const props = defineProps<{
   show: boolean
   word: string
   x: number
@@ -86,4 +86,22 @@ defineProps<{
     }>
   }>
 }>()
+
+const cardRef = ref<HTMLElement | null>(null)
+
+const adjustedX = computed(() => {
+  const maxX = window.innerWidth - 320 // card max-width
+  return Math.min(Math.max(16, props.x), maxX - 16)
+})
+const adjustedY = computed(() => {
+  const maxY = window.innerHeight - 400 // estimated card height
+  return Math.min(Math.max(16, props.y + 20), maxY - 16)
+})
+
+onMounted(() => {
+  if (cardRef.value) {
+    const { setWordCardRef } = useTranslationCard()
+    setWordCardRef(cardRef.value)
+  }
+})
 </script>

@@ -19,7 +19,6 @@ export function useSentenceInteraction(
     partIndex: number | null,
     event: MouseEvent,
   ) {
-    // Обрабатываем случай, когда курсор ушел (переданы null)
     if (sentenceIndex === null || partIndex === null) {
       hoverState.value = null
       return
@@ -37,16 +36,20 @@ export function useSentenceInteraction(
   }
 
   async function handleTextClick(sentenceIndex: number, partIndex: number, event: MouseEvent) {
+    event.stopPropagation() // Останавливаем bubbling клика, чтобы избежать немедленного закрытия
     const sentences = pageRef.value
     if (!sentences) return
     const sentence = sentences[sentenceIndex]
     const parts = splitSentence(sentence.originalText)
-    const part = parts[partIndex]
+    let part = parts[partIndex]
 
     if (isSpace(part)) {
       handlers.showSentence(sentence, event)
     } else {
-      await handlers.showWord(part, event)
+      part = part.replace(/[.,!?;:"'()«»—–-]/g, '').trim()
+      if (part) {
+        await handlers.showWord(part, event)
+      }
     }
   }
 

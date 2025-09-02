@@ -19,7 +19,6 @@ const createApiInstance = (baseURL: string): AxiosInstance => {
   instance.interceptors.request.use(async (config) => {
     try {
       const token = await getToken(30)
-      console.log(token)
       config.headers.Authorization = `Bearer ${token}`
       return config
     } catch (error) {

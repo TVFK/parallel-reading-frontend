@@ -3,7 +3,6 @@ import type { Book } from '@/types/Book'
 
 export const BooksService = {
   async fetchSortedBooks(): Promise<Book[][]> {
-    console.log(booksApi.getUri())
     const response = await booksApi.get<Book[][]>('/books/grouped-by-levels')
     return response.data
   },

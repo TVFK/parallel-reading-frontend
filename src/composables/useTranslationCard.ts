@@ -31,28 +31,51 @@ export function useTranslationCard(translationStore = useTranslationStore()) {
     y: 0,
   })
 
-  const closeTranslationCard = () => {
-    sentenceTranslationCard.show = false
-    document.removeEventListener('click', closeTranslationCard)
+  let sentenceCardRef: HTMLElement | null = null
+  let wordCardRef: HTMLElement | null = null
+
+  function setSentenceCardRef(el: HTMLElement | null) {
+    sentenceCardRef = el
   }
 
-  const closeWordTranslationCard = () => {
+  function setWordCardRef(el: HTMLElement | null) {
+    wordCardRef = el
+  }
+
+  const closeSentenceTranslationCard = (event?: MouseEvent) => {
+    if (event && sentenceCardRef && sentenceCardRef.contains(event.target as Node)) {
+      return
+    }
+    sentenceTranslationCard.show = false
+    document.removeEventListener('click', closeSentenceTranslationCard)
+  }
+
+  const closeWordTranslationCard = (event?: MouseEvent) => {
+    if (event && wordCardRef && wordCardRef.contains(event.target as Node)) {
+      return
+    }
     wordTranslationCard.show = false
     document.removeEventListener('click', closeWordTranslationCard)
   }
 
   const showSentenceTranslation = (sentence: Sentence, event: MouseEvent) => {
+    closeSentenceTranslationCard()
     sentenceTranslationCard.original = sentence.originalText
     sentenceTranslationCard.text = sentence.translatedText
     sentenceTranslationCard.x = event.clientX
     sentenceTranslationCard.y = event.clientY
-    sentenceTranslationCard.show = true
-    setTimeout(() => {
-      document.addEventListener('click', closeTranslationCard, { once: true })
-    }, 10)
+    if (sentenceTranslationCard.text) {
+      // Проверяем, есть ли перевод; если пусто, не показываем или показываем ошибку
+      sentenceTranslationCard.show = true
+    } else {
+      sentenceTranslationCard.error = true
+      sentenceTranslationCard.show = true // Можно показать с ошибкой "Нет перевода"
+    }
+    document.addEventListener('click', closeSentenceTranslationCard)
   }
 
   const showWordTranslation = async (word: string, event: MouseEvent) => {
+    closeWordTranslationCard()
     try {
       wordTranslationCard.word = word
       wordTranslationCard.loading = true
@@ -64,36 +87,37 @@ export function useTranslationCard(translationStore = useTranslationStore()) {
         wordTranslationCard.show = true
         wordTranslationCard.x = event.clientX
         wordTranslationCard.y = event.clientY
-      }
-      wordTranslationCard.transcription = wordTranslation.definitions[0]?.ts || ''
-      wordTranslationCard.definitions = wordTranslation.definitions.map(
-        (def: {
-          pos: string
-          translations: Array<{
-            text: string
-            asp?: string
-            meanings: string[]
-          }>
-        }) => ({
-          pos: def.pos,
-          translations: def.translations.map(
-            (tr: { text: string; asp?: string; meanings: string[] }) => ({
-              text: tr.text,
-              aspect: tr.asp,
-              meanings: tr.meanings,
+        wordTranslationCard.transcription = wordTranslation?.definitions[0]?.ts || ''
+        wordTranslationCard.definitions =
+          wordTranslation?.definitions.map(
+            (def: {
+              pos: string
+              translations: Array<{
+                text: string
+                asp?: string
+                meanings: string[]
+              }>
+            }) => ({
+              pos: def.pos,
+              translations: def.translations.map(
+                (tr: { text: string; asp?: string; meanings: string[] }) => ({
+                  text: tr.text,
+                  aspect: tr.asp,
+                  meanings: tr.meanings,
+                }),
+              ),
             }),
-          ),
-        }),
-      )
+          ) || []
+      } else {
+        wordTranslationCard.error = true
+      }
     } catch (err) {
       wordTranslationCard.error = true
     } finally {
       wordTranslationCard.loading = false
     }
 
-    setTimeout(() => {
-      document.addEventListener('click', closeWordTranslationCard, { once: true })
-    }, 10)
+    document.addEventListener('click', closeWordTranslationCard)
   }
 
   return {
@@ -101,5 +125,7 @@ export function useTranslationCard(translationStore = useTranslationStore()) {
     wordTranslationCard,
     showSentenceTranslation,
     showWordTranslation,
+    setSentenceCardRef,
+    setWordCardRef,
   }
 }
