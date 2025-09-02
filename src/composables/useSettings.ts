@@ -1,15 +1,28 @@
 import { ref, watch } from 'vue'
 
-// Composable для общих настроек (шрифт, размер, тема)
 export function useSettings() {
   const font = ref(localStorage.getItem('font') || 'lora')
-  const textSize = ref(Number(localStorage.getItem('textSize')) || 26)
+  const textSize = ref(Number(localStorage.getItem('textSize')) || 28)
   const theme = ref(localStorage.getItem('theme') || 'light')
 
-  // Сохраняем изменения в localStorage
-  watch(font, (val) => localStorage.setItem('font', val))
-  watch(textSize, (val) => localStorage.setItem('textSize', val.toString()))
-  watch(theme, (val) => localStorage.setItem('theme', val))
+  const applySettings = () => {
+    document.body.className = theme.value
 
-  return { font, textSize, theme }
+    document.querySelectorAll('.text-content').forEach((el) => {
+      ;(el as HTMLElement).style.fontFamily = font.value
+      ;(el as HTMLElement).style.fontSize = `${textSize.value}px`
+    })
+
+    localStorage.setItem('font', font.value)
+    localStorage.setItem('textSize', textSize.value.toString())
+    localStorage.setItem('theme', theme.value)
+  }
+
+  applySettings()
+
+  watch(font, applySettings)
+  watch(textSize, applySettings)
+  watch(theme, applySettings)
+
+  return { font, textSize, theme, applySettings }
 }

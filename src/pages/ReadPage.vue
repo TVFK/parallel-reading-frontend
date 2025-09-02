@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full min-h-screen transition-colors duration-300" :class="themeClasses">
+  <div class="relative w-full min-h-screen transition-colors duration-300">
     <!-- Navigation Bar -->
     <ReadPageNavBar :book="book" :chapter="currentChapter" @toggle-chapters="showChapters = !showChapters"
       @toggle-settings="showSettings = !showSettings" />
@@ -16,12 +16,11 @@
 
     <!-- Text Content -->
     <TextContent :sentences="sentences" :title="currentChapter?.title" :split="splitSentence" :on-hover="handleHover"
-      :on-click="handleTextClick" :is-highlighted="isPartHighlighted" :font="font" :text-size="textSize"
-      :theme="theme" />
+      :on-click="handleTextClick" :is-highlighted="isPartHighlighted" />
 
     <!-- Индикатор страницы -->
-    <div class="w-full max-w-[1205px] mx-auto px-4 py-4 text-center">
-      <div class="inline-block bg-white/80 px-4 py-2 rounded-full shadow-lg">
+    <div class="w-full max-w-[1205px] mx-auto px-4 py-8 text-center">
+      <div class="text-2xl font-medium text-gray-800">
         Page {{ page?.pageNumber || 1 }} of {{ book?.numberOfPage || 1 }}
       </div>
     </div>
@@ -31,12 +30,12 @@
     <WordTranslationCard v-bind="wordTranslationCard" />
 
     <button @click="prevPage" :disabled="!page || page.pageNumber <= 1"
-      class="fixed left-4 top-1/2 transform -translate-y-1/2 p-2 disabled:opacity-30 z-30">
+      class="cursor-pointer fixed left-4 top-1/2 transform -translate-y-1/2 p-2 disabled:opacity-30 z-30">
       <IconArrow class="rotate-180 w-[18px] h-[60px]" />
     </button>
 
     <button @click="nextPage" :disabled="!page || page.pageNumber >= (book?.numberOfPage || 1)"
-      class="fixed right-4 top-1/2 transform -translate-y-1/2 p-2 disabled:opacity-30 z-30">
+      class="cursor-pointer fixed right-4 top-1/2 transform -translate-y-1/2 p-2 disabled:opacity-30 z-30">
       <IconArrow class="w-[18px] h-[60px]" />
     </button>
   </div>
@@ -48,14 +47,13 @@ import { useRoute } from 'vue-router'
 
 import ReadPageNavBar from '@/components/read-page/ReadPageNavBar.vue'
 import ChapterDrawer from '@/components/read-page/ChapterDrawer.vue'
-import SettingsDrawer from '@/components/read-page/SettingsDrawer.vue'  // Новый компонент
+import SettingsDrawer from '@/components/read-page/SettingsDrawer.vue'
 import TextContent from '@/components/read-page/TextContent.vue'
 import SentenceTranslationCard from '@/components/read-page/SentenceTranslationCard.vue'
 import WordTranslationCard from '@/components/read-page/WordTranslationCard.vue'
 import { useBookLoader } from '@/composables/useBookLoader'
 import { useSentenceInteraction } from '@/composables/useSentenceInteraction'
 import { useTranslationCard } from '@/composables/useTranslationCard'
-import { useSettings } from '@/composables/useSettings'
 import IconArrow from '@/components/icons/IconArrow.vue'
 
 const route = useRoute()
@@ -91,16 +89,4 @@ const currentChapter = computed(() =>
 
 const showChapters = ref(false)
 const showSettings = ref(false)
-
-// Настройки
-const { font, textSize, theme } = useSettings()
-
-// Классы для корневого div на основе темы
-const themeClasses = computed(() => {
-  switch (theme.value) {
-    case 'dark': return 'bg-gray-900 text-white'
-    case 'book': return 'bg-yellow-50 text-yellow-900'
-    default: return 'bg-white text-[#000000]'
-  }
-})
 </script>
