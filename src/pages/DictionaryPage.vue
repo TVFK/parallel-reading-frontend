@@ -4,8 +4,8 @@
     <div class="container mx-auto px-4 mb-8">
       <DictionaryHeader @start-learning="startLearning" />
 
-      <DictionaryFilters v-model:sortOption="sortOption" :filters="filters" :active-filters="activeFilters"
-        @toggle-filter="toggleFilter" class="mt-8" />
+      <DictionaryFilters v-model:sortOption="sortOption" :active-filters="activeFilters" @toggle-filter="toggleFilter"
+        class="mt-8" />
 
       <div v-if="dictionaryStore.isLoading" class="flex justify-center mt-20">
         Идёт загрузка
@@ -51,7 +51,6 @@ const router = useRouter();
 const sortOption = ref('date');
 const currentPage = ref(0);
 const pageSize = 9;
-const filters = ['Глаголы', 'Существительные', 'Прилагательные', 'Идиомы', 'Для повторения'];
 const activeFilters = ref<string[]>([]);
 const words = ref<DictionaryCard[]>([]);
 

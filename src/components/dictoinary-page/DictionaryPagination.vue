@@ -1,4 +1,3 @@
-<!-- DictionaryPagination.vue -->
 <template>
   <nav class="flex items-center gap-1">
     <button @click="$emit('prev-page')" :disabled="currentPage === 0"
