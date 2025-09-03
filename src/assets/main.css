@@ -1,20 +1,26 @@
 @import 'tailwindcss';
 
-body.light {
-  background: white;
-  color: black;
-}
-
-body.dark {
-  background: #1a202c;
-  color: #e2e8f0;
-}
-
-body.book {
-  background: #fef7e0;
-  color: #5a4a42;
+:root {
+  --reading-font: 'Lora', serif;
+  --reading-font-size: 28px;
 }
 
 .text-content {
-  transition: all 0.3s ease;
+  font-family: var(--reading-font);
+  font-size: var(--reading-font-size);
+}
+
+body.light {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+}
+
+body.dark {
+  --bg-color: #1a1a1a;
+  --text-color: #ffffff;
+}
+
+body.book {
+  --bg-color: #f5e8d3;
+  --text-color: #000000;
 }

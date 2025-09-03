@@ -6,7 +6,7 @@ export function useSentenceInteraction(
   pageRef: Ref<Sentence[] | undefined>,
   handlers: {
     showSentence: (sentence: Sentence, event: MouseEvent) => void
-    showWord: (word: string, event: MouseEvent) => Promise<void>
+    showWord: (word: string, context: string, event: MouseEvent) => Promise<void>
   },
 ) {
   const hoverState = ref<{ sentenceIndex: number; partIndex: number } | null>(null)
@@ -48,7 +48,7 @@ export function useSentenceInteraction(
     } else {
       part = part.replace(/[.,!?;:"'()«»—–-]/g, '').trim()
       if (part) {
-        await handlers.showWord(part, event)
+        await handlers.showWord(part, sentence.originalText, event)
       }
     }
   }

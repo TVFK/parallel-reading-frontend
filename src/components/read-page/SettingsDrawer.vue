@@ -3,7 +3,11 @@
     <div v-if="visible" class="fixed right-0 top-0 h-full w-80 bg-white shadow-lg p-6 border-l border-gray-200 z-40">
       <div class="flex justify-between items-center mb-6">
         <h3 class="text-xl font-semibold">Настройки</h3>
-        <button @click="close" class="cursor-pointer text-gray-500 hover:text-gray-700">&times;</button>
+        <button @click="close" class="cursor-pointer p-2 rounded-full hover:bg-gray-100 transition-colors">
+          <svg class="w-6 h-6 text-gray-500 hover:text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
       </div>
       <div class="space-y-6">
         <div>
@@ -12,7 +16,7 @@
             class="cursor-pointer w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="lora">Lora</option>
             <option value="arial">Arial</option>
-            <option value="times">Times New Roman</option>
+            <option value="georgia">Georgia</option>
           </select>
         </div>
         <div>
@@ -22,13 +26,22 @@
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">Тема</label>
-          <div class="flex flex-wrap space-x-2 space-y-2">
-            <button @click="theme = 'light'" class="cursor-pointer px-3 py-1 rounded-md"
-              :class="theme === 'light' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'">Светлая</button>
-            <button @click="theme = 'dark'" class="cursor-pointer px-3 py-1 rounded-md"
-              :class="theme === 'dark' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'">Темная</button>
-            <button @click="theme = 'book'" class="cursor-pointer px-3 py-1 rounded-md"
-              :class="theme === 'book' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'">Книжная</button>
+          <div class="flex flex-wrap gap-2"> <!-- Изменили space-x-2 space-y-2 на gap-2 -->
+            <button @click="theme = 'light'"
+              class="cursor-pointer px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              :class="theme === 'light' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'">
+              Светлая
+            </button>
+            <button @click="theme = 'dark'"
+              class="cursor-pointer px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              :class="theme === 'dark' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'">
+              Темная
+            </button>
+            <button @click="theme = 'book'"
+              class="cursor-pointer px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              :class="theme === 'book' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'">
+              Книжная
+            </button>
           </div>
         </div>
         <button @click="applyAndClose"

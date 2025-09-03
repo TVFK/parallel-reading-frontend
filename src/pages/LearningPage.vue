@@ -18,12 +18,12 @@
 
       <div class="mb-8">
         <div class="flex justify-between text-sm text-gray-500 mb-1">
-          <span>Прогресс: {{ currentCardIndex + 1 }} / {{ cards.length }}</span>
-          <span>{{ Math.round((currentCardIndex / cards.length) * 100) || 0 }}%</span>
+          <span>Прогресс: {{ progressDisplay.current }} / {{ progressDisplay.total }}</span>
+          <span>{{ progressDisplay.percentage }}%</span>
         </div>
         <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
           <div class="h-full bg-[#5E5DF0] transition-all duration-500 ease-out"
-            :style="{ width: `${(currentCardIndex / cards.length) * 100}%` }"></div>
+            :style="{ width: `${progressDisplay.percentage}%` }"></div>
         </div>
       </div>
 
@@ -167,6 +167,33 @@ const difficultyButtons = [
 const currentCard = computed(() => {
   return cards.value[currentCardIndex.value] || {};
 });
+
+const progressDisplay = computed(() => {
+  if (sessionCompleted.value) {
+    return {
+      current: cards.value.length,
+      total: cards.value.length,
+      percentage: 100
+    };
+  }
+
+  if (cards.value.length === 0) {
+    return {
+      current: 0,
+      total: 0,
+      percentage: 100
+    };
+  }
+
+  const percentage = Math.round((currentCardIndex.value / cards.value.length) * 100);
+
+  return {
+    current: currentCardIndex.value,
+    total: cards.value.length,
+    percentage: percentage
+  };
+});
+
 
 const initLearning = async () => {
   try {

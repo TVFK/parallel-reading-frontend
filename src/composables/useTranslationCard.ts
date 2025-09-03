@@ -17,6 +17,7 @@ export function useTranslationCard(translationStore = useTranslationStore()) {
     show: false,
     word: '',
     transcription: '',
+    context: '',
     definitions: [] as Array<{
       pos: string
       translations: Array<{
@@ -74,7 +75,7 @@ export function useTranslationCard(translationStore = useTranslationStore()) {
     document.addEventListener('click', closeSentenceTranslationCard)
   }
 
-  const showWordTranslation = async (word: string, event: MouseEvent) => {
+  const showWordTranslation = async (word: string, context: string, event: MouseEvent) => {
     closeWordTranslationCard()
     try {
       wordTranslationCard.word = word
@@ -87,6 +88,7 @@ export function useTranslationCard(translationStore = useTranslationStore()) {
         wordTranslationCard.show = true
         wordTranslationCard.x = event.clientX
         wordTranslationCard.y = event.clientY
+        wordTranslationCard.context = context
         wordTranslationCard.transcription = wordTranslation?.definitions[0]?.ts || ''
         wordTranslationCard.definitions =
           wordTranslation?.definitions.map(
