@@ -16,6 +16,13 @@ export const PagesService = {
     return response.data
   },
 
+  async fetchFirstPageOfChapter(chapterId: number): Promise<Page> {
+    const response = await booksApi.get<Page>(`/reader/chapter-first-page`, {
+      params: { chapterId },
+    })
+    return response.data
+  },
+
   async nextPage(currentPageId: number): Promise<Page> {
     const response = await booksApi.get<Page>('/reader/next', {
       params: { pageId: currentPageId },

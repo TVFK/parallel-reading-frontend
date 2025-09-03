@@ -9,7 +9,7 @@
       class="fixed inset-0 bg-black/30 z-30" />
 
     <!-- Chapter Drawer -->
-    <ChapterDrawer v-model:visible="showChapters" :chapters="chapters" @select="goToChapter" />
+    <ChapterDrawer v-model:visible="showChapters" :chapters="chapters" @select="goToChapter($event)" />
 
     <!-- Settings Drawer -->
     <SettingsDrawer v-model:visible="showSettings" />

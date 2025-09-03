@@ -17,8 +17,9 @@ export function useBookLoader(route: RouteLocationNormalizedLoaded) {
   const chapters = ref<Chapter[]>([])
   const page = ref<Page | undefined>(undefined)
 
-  function goToChapter(pageNumber: number) {
-    router.push({ query: { pageNumber } })
+  async function goToChapter(chapterId: number) {
+    await pageStore.fetchFirstPageOfChapter(chapterId)
+    page.value = pageStore.currentPage
   }
 
   async function nextPage() {

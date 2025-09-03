@@ -32,6 +32,20 @@ export const usePagesStore = defineStore('pagesStore', () => {
     }
   }
 
+  const fetchFirstPageOfChapter = async (chapterId: number) => {
+    isLoading.value = true
+    error.value = null
+
+    const page = await PagesService.fetchFirstPageOfChapter(chapterId)
+
+    if (!page) {
+      throw new Error('Страница не найдена')
+    }
+
+    currentPage.value = page
+    router.push({ query: { pageNumber: page.pageNumber } })
+  }
+
   const navigatePage = async (action: 'next' | 'prev') => {
     isLoading.value = true
     error.value = null
@@ -62,6 +76,7 @@ export const usePagesStore = defineStore('pagesStore', () => {
     isLoading,
     error,
     fetchPageByBookId,
+    fetchFirstPageOfChapter,
     navigatePage,
   }
 })
