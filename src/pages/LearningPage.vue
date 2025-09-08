@@ -136,7 +136,6 @@ import { useDictionaryStore } from '@/stores/DictionaryStore';
 import type { DictionaryCard } from '@/types/DictionaryCard';
 import { useKeycloak } from '@josempgon/vue-keycloak';
 
-const keycloakobj = useKeycloak();
 const { keycloak } = useKeycloak();
 const dictionaryStore = useDictionaryStore();
 const router = useRouter();
@@ -249,10 +248,11 @@ const endSession = () => {
 };
 
 onMounted(() => {
-  if (!keycloakobj.isAuthenticated) {
+  if (!keycloak.value?.authenticated) {
     keycloak.value?.login();
+  } else {
+    initLearning();
   }
-  initLearning();
 });
 </script>
 

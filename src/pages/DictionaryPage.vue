@@ -46,7 +46,6 @@ import { useRouter } from 'vue-router';
 import { watch } from 'vue';
 import { useKeycloak } from '@josempgon/vue-keycloak';
 
-const keycloakobj = useKeycloak();
 const { keycloak } = useKeycloak();
 const dictionaryStore = useDictionaryStore();
 const router = useRouter();
@@ -83,7 +82,7 @@ const loadData = async () => {
 };
 
 onMounted(async () => {
-  if (!keycloakobj.isAuthenticated) {
+  if (!keycloak.value?.authenticated) {
     keycloak.value?.login();
   }
 })

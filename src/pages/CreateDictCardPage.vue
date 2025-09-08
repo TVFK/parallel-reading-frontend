@@ -108,7 +108,6 @@ import type { UpdateDictionaryCard } from '@/types/UpdateDictionaryCard';
 import type { DictionaryCard } from '@/types/DictionaryCard';
 import { useKeycloak } from '@josempgon/vue-keycloak';
 
-const keycloakobj = useKeycloak();
 const { keycloak } = useKeycloak();
 const route = useRoute();
 const router = useRouter();
@@ -144,7 +143,7 @@ const removeTag = (index: number) => {
 
 
 onMounted(async () => {
-  if (!keycloakobj.isAuthenticated) {
+  if (!keycloak.value?.authenticated) {
     keycloak.value?.login();
   }
   if (isEditMode.value) {
