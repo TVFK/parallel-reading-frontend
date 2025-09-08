@@ -44,7 +44,10 @@ import { onMounted, ref } from 'vue';
 import { useDictionaryStore } from '@/stores/DictionaryStore';
 import { useRouter } from 'vue-router';
 import { watch } from 'vue';
+import { useKeycloak } from '@josempgon/vue-keycloak';
 
+const keycloakobj = useKeycloak();
+const { keycloak } = useKeycloak();
 const dictionaryStore = useDictionaryStore();
 const router = useRouter();
 
@@ -78,6 +81,12 @@ const loadData = async () => {
   );
   words.value = dictionaryStore.dictionaryCards;
 };
+
+onMounted(async () => {
+  if (!keycloakobj.isAuthenticated) {
+    keycloak.value?.login();
+  }
+})
 
 onMounted(loadData);
 

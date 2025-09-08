@@ -33,11 +33,20 @@
         <span>Словарь</span>
       </div>
 
-      <div @click="login"
-        class="cursor-pointer flex flex-col items-center text-sm hover:scale-105 transition-transform">
-        <IconProfile class="w-8 h-8 text-gray-800" />
-        <span>Войти</span>
-      </div>
+      <template v-if="keycloak?.authenticated">
+        <div @click="logout"
+          class="cursor-pointer flex flex-col items-center text-sm hover:scale-105 transition-transform">
+          <IconProfile class="w-8 h-8 text-gray-800" />
+          <span>Выйти</span>
+        </div>
+      </template>
+      <template v-else>
+        <div @click="login"
+          class="cursor-pointer flex flex-col items-center text-sm hover:scale-105 transition-transform">
+          <IconProfile class="w-8 h-8 text-gray-800" />
+          <span>Войти</span>
+        </div>
+      </template>
     </div>
   </nav>
 </template>
@@ -91,4 +100,9 @@ const clearSearch = () => {
     router.replace({ path: '/search', query: restQuery });
   }
 };
+
+const logout = () => {
+  keycloak.value?.logout()
+}
+
 </script>

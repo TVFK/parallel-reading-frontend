@@ -1,6 +1,7 @@
 import axios, { type AxiosInstance } from 'axios'
 import { useKeycloak, getToken } from '@josempgon/vue-keycloak'
 
+const keycloak = useKeycloak()
 const BOOKS_API_URL = import.meta.env.VITE_BOOKS_API_URL
 const TRANSLATION_URL = import.meta.env.VITE_API_TRANSLATION_URL
 const DICTIONARY_URL = import.meta.env.VITE_API_DICTIONARY_URL
@@ -18,8 +19,10 @@ const createApiInstance = (baseURL: string): AxiosInstance => {
 
   instance.interceptors.request.use(async (config) => {
     try {
-      const token = await getToken(30)
-      config.headers.Authorization = `Bearer ${token}`
+      if (keycloak.isAuthenticated) {
+        const token = await getToken(30)
+        config.headers.Authorization = `Bearer ${token}`
+      }
       return config
     } catch (error) {
       console.error('Ошибка при получении токена:', error)

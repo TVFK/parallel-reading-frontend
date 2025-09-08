@@ -19,8 +19,7 @@ const initApp = async () => {
     initOptions: {
       flow: 'standard',
       checkLoginIframe: true,
-      // onLoad: 'check-sso',
-      onLoad: false,
+      onLoad: 'check-sso',
       pkceMethod: 'S256',
     },
   })

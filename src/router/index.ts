@@ -1,11 +1,9 @@
 import BookReview from '@/pages/BookReview.vue'
-import LoginPage from '@/pages/LoginPage.vue'
 import MainPage from '@/pages/MainPage.vue'
 import ReadPage from '@/pages/ReadPage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import CatalogPage from '@/pages/CatalogPage.vue'
 import AboutPage from '@/pages/AboutPage.vue'
-import RegistrationPage from '@/pages/RegistrationPage.vue'
 import SearchPage from '@/pages/SearchPage.vue'
 import E404 from '@/components/ErrorPage404.vue'
 import DictionaryPage from '@/pages/DictionaryPage.vue'
@@ -54,16 +52,6 @@ const router = createRouter({
       path: '/learn',
       name: 'learning',
       component: LearningPage,
-    },
-    {
-      path: '/registration',
-      name: 'registration',
-      component: RegistrationPage,
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: LoginPage,
     },
     {
       path: '/about',

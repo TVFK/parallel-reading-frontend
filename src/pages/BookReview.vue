@@ -13,7 +13,6 @@
       <div v-else-if="error" class="text-center text-red-500">Ошибка: {{ error }}</div>
 
       <div v-else class="flex flex-col lg:flex-row gap-8">
-        <!-- TODO Сделать сохранение последней посещенной страницы -->
         <div class="flex flex-col items-center lg:items-start">
           <img :src="bookImageUrl" :alt="`Обложка книги ${book?.title}`" class="w-80 h-auto rounded-lg shadow-lg" />
           <DefaultButton @click="$router.push({ path: `/books/${book?.title}`, query: { pageNumber: 1 } })"

@@ -134,6 +134,10 @@ import NavBar from '@/components/NavBar.vue';
 import AppFooter from '@/components/AppFooter.vue';
 import { useDictionaryStore } from '@/stores/DictionaryStore';
 import type { DictionaryCard } from '@/types/DictionaryCard';
+import { useKeycloak } from '@josempgon/vue-keycloak';
+
+const keycloakobj = useKeycloak();
+const { keycloak } = useKeycloak();
 const dictionaryStore = useDictionaryStore();
 const router = useRouter();
 
@@ -245,6 +249,9 @@ const endSession = () => {
 };
 
 onMounted(() => {
+  if (!keycloakobj.isAuthenticated) {
+    keycloak.value?.login();
+  }
   initLearning();
 });
 </script>
