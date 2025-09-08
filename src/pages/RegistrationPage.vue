@@ -26,13 +26,6 @@
               class="block w-full px-4 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500" />
           </div>
 
-          <div class="mb-4">
-            <label class="flex items-center">
-              <input v-model="registrationCredentials.termsAccepted" type="checkbox" id="terms" class="mr-2" />
-              Согласен с условиями
-            </label>
-          </div>
-
           <div class="flex space-x-4">
             <DefaultButton type="submit" id="registerMyButton" class="px-6 py-2 shadow-sm hover:bg-blue-600">
               Регистрация
@@ -49,24 +42,23 @@
 <script setup lang="ts">
 import AppFooter from '@/components/AppFooter.vue';
 import NavBar from '../components/NavBar.vue';
-import axios from 'axios';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import DefaultInput from '@/components/UI/DefaultInput.vue';
 import DefaultButton from '@/components/UI/DefaultButton.vue';
+import { useAuthStore } from '@/stores/AuthStore';
+import type { RegistrationCredentials } from '@/types/RgistrationCredentials';
 
+const AuthStore = useAuthStore();
 const router = useRouter();
-const termsAccepted = ref(false);
-
-const registrationCredentials = reactive({
+const registrationCredentials = reactive<RegistrationCredentials>({
   email: '',
   password: '',
-  confirmPassword: '',
-  termsAccepted: false,
+  confirmPassword: ''
 });
 
-
 async function register() {
+  AuthStore.registerUser(registrationCredentials);
 }
 
 </script>

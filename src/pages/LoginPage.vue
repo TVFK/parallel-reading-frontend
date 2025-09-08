@@ -35,13 +35,7 @@ const loginCredentials = reactive({
   password: '',
 });
 const login = async () => {
-  try {
-    const response = await axios.post('http://localhost:8000/api/login', loginCredentials);
-    localStorage.setItem('token', response.data.token);
-    router.push('/');
-  } catch (error) {
-    console.error(error);
-  }
+
 };
 
 </script>

@@ -4,7 +4,7 @@ import { useKeycloak, getToken } from '@josempgon/vue-keycloak'
 const BOOKS_API_URL = import.meta.env.VITE_BOOKS_API_URL
 const TRANSLATION_URL = import.meta.env.VITE_API_TRANSLATION_URL
 const DICTIONARY_URL = import.meta.env.VITE_API_DICTIONARY_URL
-const keycloak = useKeycloak()
+const AUTH_API_URL = import.meta.env.VITE_API_AUTH_URL
 
 const createApiInstance = (baseURL: string): AxiosInstance => {
   const instance = axios.create({
@@ -43,3 +43,4 @@ const createApiInstance = (baseURL: string): AxiosInstance => {
 export const booksApi = createApiInstance(BOOKS_API_URL)
 export const translationApi = createApiInstance(TRANSLATION_URL)
 export const dictionaryApi = createApiInstance(DICTIONARY_URL)
+export const authApi = createApiInstance(AUTH_API_URL)

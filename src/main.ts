@@ -6,6 +6,7 @@ import { vueKeycloak } from '@josempgon/vue-keycloak'
 
 import App from './App.vue'
 import router from './router'
+
 const initApp = async () => {
   const app = createApp(App)
 
@@ -17,8 +18,9 @@ const initApp = async () => {
     },
     initOptions: {
       flow: 'standard',
-      checkLoginIframe: false,
-      onLoad: 'login-required',
+      checkLoginIframe: true,
+      // onLoad: 'check-sso',
+      onLoad: false,
       pkceMethod: 'S256',
     },
   })

@@ -33,7 +33,7 @@
         <span>Словарь</span>
       </div>
 
-      <div @click="$router.push('/login')"
+      <div @click="login"
         class="cursor-pointer flex flex-col items-center text-sm hover:scale-105 transition-transform">
         <IconProfile class="w-8 h-8 text-gray-800" />
         <span>Войти</span>
@@ -50,7 +50,9 @@ import IconLogo from './icons/IconLogo.vue';
 import IconMyBooks from './icons/IconMyBooks.vue';
 import IconProfile from './icons/IconProfile.vue';
 import IconLoupe from './icons/IconLoupe.vue';
+import { useKeycloak } from '@josempgon/vue-keycloak';
 
+const { keycloak } = useKeycloak()
 const router = useRouter();
 const route = useRoute();
 const searchQuery = ref(route.query.title?.toString() || '');
@@ -64,6 +66,10 @@ watch(
     }
   }
 );
+
+const login = () => {
+  keycloak.value?.login()
+}
 
 const search = () => {
   const query = searchQuery.value.trim();
